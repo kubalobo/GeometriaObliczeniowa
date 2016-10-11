@@ -9,8 +9,16 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 
+enum ObjectTypes
+{
+    Punkt,
+    Lamana,
+    Poligon
+};
+
 namespace GeometriaObliczeniowa
 {
+
     public partial class Form1 : Form
     {
         public Form1()
@@ -37,11 +45,20 @@ namespace GeometriaObliczeniowa
 
 }
 
+class Shape
+{
+    ObjectTypes type;
+    Point[] points;
+}
 
 class ReadFromFile
 {
     int counter = 0;
+    int actual;
+    ObjectTypes actualType;
     string line;
+
+    List<Shape> shapes = new List<Shape>();
 
     System.IO.StreamReader file =
             new System.IO.StreamReader(@".\ObiektyTerenowe.MAP");
@@ -50,14 +67,29 @@ class ReadFromFile
     {
         while ((line = file.ReadLine()) != null)
         {
-            //System.Console.WriteLine(line);
             if (line[0] == '*')
             {
-                //switch line[1]
+                switch (line[1])
+                {
+                    case '1':
+                        actualType = ObjectTypes.Punkt;
+                        break;
+                    case '4':
+                        actualType = ObjectTypes.Lamana;
+                        break;
+                    case '5':
+                        actualType = ObjectTypes.Poligon;
+                        break;
+                }
+
+                shapes.Add(new Shape());
 
                 counter++;
             }
+            else if (line[0] == 'P')
+            {
 
+            }
 
         }
 
