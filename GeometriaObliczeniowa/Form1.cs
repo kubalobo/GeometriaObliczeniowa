@@ -47,22 +47,22 @@ namespace GeometriaObliczeniowa
 class Shape
 {
     ObjectTypes type;
-    List<PointF> points = new List<PointF>();
+    List<PointD> points = new List<PointD>();
 
     public Shape(ObjectTypes newType)
     {
         type = newType;
     }
 
-    public void addPoint(float x, float y)
+    public void addPoint(double x, double y)
     {
-        points.Add(new PointF(x, y));
+        points.Add(new PointD(x, y));
     }
 
-    public float giveX(int i)
-    {
-        return points[i].X;
-    }
+    //public float getX(int i)
+    //{
+    //    return points[i].X;
+    //}
 }
 
 class ReadFromFile
@@ -70,6 +70,8 @@ class ReadFromFile
     int counter = 0;
     ObjectTypes actualType;
     string line;
+
+    double  minX = 999999999, maxX = -999999999, minY = 999999999, maxY = -999999999;
 
     List<Shape> shapes = new List<Shape>();
 
@@ -101,17 +103,63 @@ class ReadFromFile
             else if (line[0] == 'P')
             {
 
-                float x = float.Parse(line.Substring(5, 11), System.Globalization.CultureInfo.InvariantCulture);
-                float y = float.Parse(line.Substring(18, 11), System.Globalization.CultureInfo.InvariantCulture);
+                double x = Convert.ToDouble(line.Substring(5, 11), System.Globalization.CultureInfo.InvariantCulture);
+                double y = Convert.ToDouble(line.Substring(18, 11), System.Globalization.CultureInfo.InvariantCulture);
 
                 shapes[counter - 1].addPoint(x, y);
+
+                if (x > maxX)
+                    maxX = x;
+                if (x < minX)
+                    minX = x;
+                if (y > maxY)
+                    maxY = y;
+                if (y < minY)
+                    minY = y;
             }
 
         }
 
         file.Close();
         Debug.WriteLine(counter);
-//        Debug.WriteLine(shapes.Last.giveX[0]);
+        Debug.WriteLine(maxX);
+        Debug.WriteLine(minX);
+        Debug.WriteLine(maxY);
+        Debug.WriteLine(minY);
+    }
+}
+
+public struct PointD
+{
+    public double X;
+    public double Y;
+
+    public PointD(double x, double y)
+    {
+        X = x;
+        Y = y;
+    }
+
+    public Point ToPoint()
+    {
+        return new Point((int)X, (int)Y);
+    }
+
+    public override bool Equals(object obj)
+    {
+        return obj is PointD && this == (PointD)obj;
+    }
+    public override int GetHashCode()
+    {
+        return X.GetHashCode() ^ Y.GetHashCode();
+    }
+    public static bool operator ==(PointD a, PointD b)
+    {
+        return a.X == b.X && a.Y == b.Y;
+    }
+    public static bool operator !=(PointD a, PointD b)
+    {
+        return !(a == b);
     }
 }
 
