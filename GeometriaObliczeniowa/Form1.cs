@@ -31,8 +31,7 @@ namespace GeometriaObliczeniowa
             ReadFromFile filemon = new ReadFromFile();
 
             filemon.readLine();
-
-
+            
             this.DoubleBuffered = true;
             this.Paint += Form1_Paint;
         }
@@ -48,20 +47,33 @@ namespace GeometriaObliczeniowa
 class Shape
 {
     ObjectTypes type;
-    Point[] points;
+    List<PointF> points = new List<PointF>();
+
+    public Shape(ObjectTypes newType)
+    {
+        type = newType;
+    }
+
+    public void addPoint(float x, float y)
+    {
+        points.Add(new PointF(x, y));
+    }
+
+    public float giveX(int i)
+    {
+        return points[i].X;
+    }
 }
 
 class ReadFromFile
 {
     int counter = 0;
-    int actual;
     ObjectTypes actualType;
     string line;
 
     List<Shape> shapes = new List<Shape>();
 
-    System.IO.StreamReader file =
-            new System.IO.StreamReader(@".\ObiektyTerenowe.MAP");
+    System.IO.StreamReader file = new System.IO.StreamReader(@".\ObiektyTerenowe.MAP");
 
     public void readLine()
     {
@@ -82,19 +94,24 @@ class ReadFromFile
                         break;
                 }
 
-                shapes.Add(new Shape());
+                shapes.Add(new Shape(actualType));
 
                 counter++;
             }
             else if (line[0] == 'P')
             {
 
+                float x = float.Parse(line.Substring(5, 11), System.Globalization.CultureInfo.InvariantCulture);
+                float y = float.Parse(line.Substring(18, 11), System.Globalization.CultureInfo.InvariantCulture);
+
+                shapes[counter - 1].addPoint(x, y);
             }
 
         }
 
         file.Close();
         Debug.WriteLine(counter);
+//        Debug.WriteLine(shapes.Last.giveX[0]);
     }
 }
 
