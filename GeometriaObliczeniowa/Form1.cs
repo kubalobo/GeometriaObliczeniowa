@@ -127,6 +127,13 @@ class ReadFromFile
         Debug.WriteLine(maxY);
         Debug.WriteLine(minY);
     }
+
+    public double scale()
+    {
+        double rangeX = maxX - minX;
+        double rangeY = maxY - minY;
+        return 123;
+    }
 }
 
 public struct PointD
