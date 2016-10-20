@@ -35,7 +35,7 @@ namespace GeometriaObliczeniowa
             Debug.WriteLine(filemon.scale(800, 600));
 
             this.DoubleBuffered = true;
-            this.Paint += Form1_Paint;
+            //this.Paint += Form1_Paint;
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
@@ -53,6 +53,7 @@ namespace GeometriaObliczeniowa
 
         private void button1_Click(object sender, EventArgs e)
         {
+            this.Paint += Form1_Paint;
             this.Invalidate(); // force Redraw the form
         }
     }
