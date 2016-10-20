@@ -30,10 +30,9 @@ namespace GeometriaObliczeniowa
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            
-
             filemon.readLine();
-            Debug.WriteLine(filemon.scale(200, 200));
+
+            Debug.WriteLine(filemon.scale(800, 600));
 
             this.DoubleBuffered = true;
             this.Paint += Form1_Paint;
@@ -41,12 +40,20 @@ namespace GeometriaObliczeniowa
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.DrawRectangle(Pens.Black, new Rectangle(50, 50, 100, 100));
+            double[] scale =
+                {
+                    filemon.scale(800, 600),
+                    filemon.getMinX(),
+                    filemon.getMinY(),
+                };
+
+            for(int i = 0; i < filemon.getCount(); i++)
+                filemon.getShape(i).draw(e, scale);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            filemon
+            this.Invalidate(); // force Redraw the form
         }
     }
 

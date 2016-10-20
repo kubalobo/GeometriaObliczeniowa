@@ -14,7 +14,7 @@ namespace GeometriaObliczeniowa
 
         double minX = 999999999, maxX = -999999999, minY = 999999999, maxY = -999999999;
 
-        List<Shape> shapes = new List<Shape>();
+        public List<Shape> shapes = new List<Shape>();
 
         System.IO.StreamReader file = new System.IO.StreamReader(@".\ObiektyTerenowe.MAP");
 
@@ -28,7 +28,7 @@ namespace GeometriaObliczeniowa
                     switch (line[1])
                     {
                         case '1':
-                            shapes.Add(new Point());
+                            shapes.Add(new PointShape());
                             break;
                         case '4':
                             shapes.Add(new Polyline());
@@ -83,6 +83,26 @@ namespace GeometriaObliczeniowa
                 return s1;
             else
                 return s2;
+        }
+
+        public Shape getShape(int i)
+        {
+            return shapes[i];
+        }
+
+        public int getCount()
+        {
+            return counter;
+        }
+
+        public double getMinX()
+        {
+            return minX;
+        }
+
+        public double getMinY()
+        {
+            return minY;
         }
     }
 }

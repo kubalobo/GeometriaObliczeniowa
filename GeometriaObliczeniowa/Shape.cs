@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Drawing.Drawing2D;
+using System.Diagnostics;
 
 namespace GeometriaObliczeniowa
 {
@@ -10,19 +14,33 @@ namespace GeometriaObliczeniowa
     {
         public virtual void addPoint(double x, double y)
         { }
+
+        public virtual void draw(PaintEventArgs e, double[] scale)
+        { }
     }
 
-    class Point : Shape
+    class PointShape : Shape
     {
         PointD cordPoint;
 
-        public Point()
+        public PointShape()
         { }
 
         public override void addPoint(double x, double y)
         {
             cordPoint = new PointD(x, y);
         }
+
+        public override void draw(PaintEventArgs e, double[] scale)
+        {
+            //base.draw(e);
+
+            int y = (int)((cordPoint.X - scale[1]) * scale[0]);
+            int x = (int)((cordPoint.Y - scale[2]) * scale[0]);
+            
+            e.Graphics.FillRectangle(Brushes.Black, x, y, 1, 1);
+        }
+
     }
 
     class Polyline : Shape
@@ -36,6 +54,24 @@ namespace GeometriaObliczeniowa
         {
             points.Add(new PointD(x, y));
         }
+
+        public override void draw(PaintEventArgs e, double[] scale)
+        {
+            //base.draw(e);
+            Point[] drawPoints = new Point[points.Count()];
+
+            for (int i = 0; i < points.Count(); i++)
+            { 
+                drawPoints[i].Y = (int)((points[i].X - scale[1]) * scale[0]);
+                drawPoints[i].X = (int)((points[i].Y - scale[2]) * scale[0]);
+            }
+
+            //Debug.WriteLine(points.Count());
+
+            // Wyjatek - bledne linie z tylko jednym punktem.
+            if(drawPoints.Count() > 1)
+                e.Graphics.DrawLines(Pens.Black, drawPoints);
+        }
     }
 
     class Polygon : Shape
@@ -48,6 +84,24 @@ namespace GeometriaObliczeniowa
         public override void addPoint(double x, double y)
         {
             points.Add(new PointD(x, y));
+        }
+
+        public override void draw(PaintEventArgs e, double[] scale)
+        {
+            //base.draw(e);
+            Point[] drawPoints = new Point[points.Count()];
+
+            for (int i = 0; i < points.Count(); i++)
+            {
+                drawPoints[i].Y = (int)((points[i].X - scale[1]) * scale[0]);
+                drawPoints[i].X = (int)((points[i].Y - scale[2]) * scale[0]);
+            }
+
+            //Debug.WriteLine(points.Count());
+
+            // Wyjatek - bledne linie z tylko jednym punktem.
+            if (drawPoints.Count() > 1)
+                e.Graphics.DrawPolygon(Pens.Black, drawPoints);
         }
     }
 }
