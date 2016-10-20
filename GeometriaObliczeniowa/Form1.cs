@@ -21,6 +21,8 @@ namespace GeometriaObliczeniowa
 
     public partial class Form1 : Form
     {
+        MapData filemon = new MapData();
+
         public Form1()
         {
             InitializeComponent();
@@ -28,10 +30,11 @@ namespace GeometriaObliczeniowa
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            ReadFromFile filemon = new ReadFromFile();
+            
 
             filemon.readLine();
-            
+            Debug.WriteLine(filemon.scale(200, 200));
+
             this.DoubleBuffered = true;
             this.Paint += Form1_Paint;
         }
@@ -40,101 +43,17 @@ namespace GeometriaObliczeniowa
         {
             e.Graphics.DrawRectangle(Pens.Black, new Rectangle(50, 50, 100, 100));
         }
-    }
 
-}
-
-class Shape
-{
-    ObjectTypes type;
-    List<PointD> points = new List<PointD>();
-
-    public Shape(ObjectTypes newType)
-    {
-        type = newType;
-    }
-
-    public void addPoint(double x, double y)
-    {
-        points.Add(new PointD(x, y));
-    }
-
-    //public float getX(int i)
-    //{
-    //    return points[i].X;
-    //}
-}
-
-class ReadFromFile
-{
-    int counter = 0;
-    ObjectTypes actualType;
-    string line;
-
-    double  minX = 999999999, maxX = -999999999, minY = 999999999, maxY = -999999999;
-
-    List<Shape> shapes = new List<Shape>();
-
-    System.IO.StreamReader file = new System.IO.StreamReader(@".\ObiektyTerenowe.MAP");
-
-    public void readLine()
-    {
-        while ((line = file.ReadLine()) != null)
+        private void button1_Click(object sender, EventArgs e)
         {
-            if (line[0] == '*')
-            {
-                switch (line[1])
-                {
-                    case '1':
-                        actualType = ObjectTypes.Punkt;
-                        break;
-                    case '4':
-                        actualType = ObjectTypes.Lamana;
-                        break;
-                    case '5':
-                        actualType = ObjectTypes.Poligon;
-                        break;
-                }
-
-                shapes.Add(new Shape(actualType));
-
-                counter++;
-            }
-            else if (line[0] == 'P')
-            {
-
-                double x = Convert.ToDouble(line.Substring(5, 11), System.Globalization.CultureInfo.InvariantCulture);
-                double y = Convert.ToDouble(line.Substring(18, 11), System.Globalization.CultureInfo.InvariantCulture);
-
-                shapes[counter - 1].addPoint(x, y);
-
-                if (x > maxX)
-                    maxX = x;
-                if (x < minX)
-                    minX = x;
-                if (y > maxY)
-                    maxY = y;
-                if (y < minY)
-                    minY = y;
-            }
-
+            filemon
         }
-
-        file.Close();
-        Debug.WriteLine(counter);
-        Debug.WriteLine(maxX);
-        Debug.WriteLine(minX);
-        Debug.WriteLine(maxY);
-        Debug.WriteLine(minY);
     }
 
-    public double scale()
-    {
-        double rangeX = maxX - minX;
-        double rangeY = maxY - minY;
-        return 123;
-    }
+    
 }
+
+
 
 public struct PointD
 {
