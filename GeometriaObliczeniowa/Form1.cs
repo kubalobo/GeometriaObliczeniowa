@@ -23,9 +23,23 @@ namespace GeometriaObliczeniowa
     {
         MapData filemon = new MapData();
 
+        int drawWidth = 800, drawHight = 600;
+        Point move = new Point(0, 0);
+
         public Form1()
         {
             InitializeComponent();
+
+            this.MouseWheel += new MouseEventHandler(Form1_MouseWheel);
+            this.MouseDown += new MouseEventHandler(Form1_MouseDown);
+            this.MouseMove += new MouseEventHandler(Form1_MouseMove);
+
+            this.MouseClick += new MouseEventHandler(Form1_MouseClick);
+
+
+            //KeyPress += new KeyPressEventArgs(plusButton);
+
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -42,23 +56,110 @@ namespace GeometriaObliczeniowa
         {
             double[] scale =
                 {
-                    filemon.scale(800, 600),
+                    filemon.scale(drawWidth, drawHight),
                     filemon.getMinX(),
                     filemon.getMinY(),
                 };
 
             for(int i = 0; i < filemon.getCount(); i++)
-                filemon.getShape(i).draw(e, scale);
+                filemon.getShape(i).draw(e, scale, move);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            drawWidth = 800;
+            drawHight = 600;
+            move = new Point(0, 0);
+
             this.Paint += Form1_Paint;
             this.Invalidate(); // force Redraw the form
         }
+
+        void Form1_MouseWheel(object sender, MouseEventArgs e)
+        {
+            Console.WriteLine(e.Delta);
+            drawWidth += e.Delta * 4;
+            drawHight += e.Delta * 3;
+
+            //move.X += System.Windows.Forms.Control.MousePosition.X - 512;
+            //move.Y += System.Windows.Forms.Control.MousePosition.Y - 372;
+            
+            //this.Paint += Form1_Paint;
+            this.Invalidate();
+
+        }
+
+        private Point MouseDownLocation, ClickLocation;
+
+
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                MouseDownLocation = e.Location;
+            }
+        }
+
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                move.X -= (e.X - MouseDownLocation.X);
+                move.Y -= (e.Y - MouseDownLocation.Y);
+
+                this.Invalidate();
+
+
+                MouseDownLocation = e.Location;
+            }
+        }
+
+        private void Form1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                ClickLocation = e.Location;
+            }
+        }
+
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch (keyData)
+            {
+                case (Keys.R):
+                    {
+                        drawWidth -= 40;
+                        drawHight -= 30;
+
+                        //move.X += System.Windows.Forms.Control.MousePosition.X - 512;
+                        //move.Y += System.Windows.Forms.Control.MousePosition.X - 372;
+                        //move.X -= 512;
+                        //move.Y -= 372;
+
+                        //this.Paint += Form1_Paint;
+                        this.Invalidate();
+
+                        break;
+                    }
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+
+        }
+
+
+
+        //void plusButton(object sender, KeyPressEventArgs e)
+        //{
+        //    if (e.KeyChar == (char)Keys.Enter)
+        //    {
+        //        // Enter key pressed
+        //    }
+        //}
+
     }
 
-    
+
 }
 
 

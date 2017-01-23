@@ -44,7 +44,7 @@ namespace GeometriaObliczeniowa
                 else if (line[0] == 'P')
                 {
 
-                    double x = Convert.ToDouble(line.Substring(5, 11), System.Globalization.CultureInfo.InvariantCulture);
+                    double x = -Convert.ToDouble(line.Substring(5, 11), System.Globalization.CultureInfo.InvariantCulture);
                     double y = Convert.ToDouble(line.Substring(18, 11), System.Globalization.CultureInfo.InvariantCulture);
 
                     shapes[counter - 1].addPoint(x, y);

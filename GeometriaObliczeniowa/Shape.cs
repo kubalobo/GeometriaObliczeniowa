@@ -15,7 +15,7 @@ namespace GeometriaObliczeniowa
         public virtual void addPoint(double x, double y)
         { }
 
-        public virtual void draw(PaintEventArgs e, double[] scale)
+        public virtual void draw(PaintEventArgs e, double[] scale, Point move)
         { }
     }
 
@@ -31,12 +31,12 @@ namespace GeometriaObliczeniowa
             cordPoint = new PointD(x, y);
         }
 
-        public override void draw(PaintEventArgs e, double[] scale)
+        public override void draw(PaintEventArgs e, double[] scale, Point move)
         {
             //base.draw(e);
 
-            int y = (int)((cordPoint.X - scale[1]) * scale[0]);
-            int x = (int)((cordPoint.Y - scale[2]) * scale[0]);
+            int y = (int)((cordPoint.X - scale[1]) * scale[0]) - move.Y;
+            int x = (int)((cordPoint.Y - scale[2]) * scale[0]) - move.X;
             
             e.Graphics.FillRectangle(Brushes.Black, x, y, 1, 1);
         }
@@ -55,15 +55,15 @@ namespace GeometriaObliczeniowa
             points.Add(new PointD(x, y));
         }
 
-        public override void draw(PaintEventArgs e, double[] scale)
+        public override void draw(PaintEventArgs e, double[] scale, Point move)
         {
             //base.draw(e);
             Point[] drawPoints = new Point[points.Count()];
 
             for (int i = 0; i < points.Count(); i++)
             { 
-                drawPoints[i].Y = (int)((points[i].X - scale[1]) * scale[0]);
-                drawPoints[i].X = (int)((points[i].Y - scale[2]) * scale[0]);
+                drawPoints[i].Y = (int)((points[i].X - scale[1]) * scale[0]) - move.Y;
+                drawPoints[i].X = (int)((points[i].Y - scale[2]) * scale[0]) - move.X;
             }
 
             //Debug.WriteLine(points.Count());
@@ -86,15 +86,15 @@ namespace GeometriaObliczeniowa
             points.Add(new PointD(x, y));
         }
 
-        public override void draw(PaintEventArgs e, double[] scale)
+        public override void draw(PaintEventArgs e, double[] scale, Point move)
         {
             //base.draw(e);
             Point[] drawPoints = new Point[points.Count()];
 
             for (int i = 0; i < points.Count(); i++)
             {
-                drawPoints[i].Y = (int)((points[i].X - scale[1]) * scale[0]);
-                drawPoints[i].X = (int)((points[i].Y - scale[2]) * scale[0]);
+                drawPoints[i].Y = (int)((points[i].X - scale[1]) * scale[0]) - move.Y;
+                drawPoints[i].X = (int)((points[i].Y - scale[2]) * scale[0]) - move.X;
             }
 
             //Debug.WriteLine(points.Count());
